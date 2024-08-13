@@ -34,9 +34,9 @@ func main() {
 
 	// Sans fichier config.ini mais avec des flags
 	// Définir les flags pour l'entrée utilisateur via la CLI
-	user := flag.String("user", "", "Nom d'utilisateur SSH")
-	password := flag.String("password", "", "Mot de passe SSH")
-	host := flag.String("host", "", "Adresse IP ou hôte du serveur SSH")
+	user := flag.String("u", "", "Nom d'utilisateur SSH")
+	password := flag.String("p", "", "Mot de passe SSH")
+	host := flag.String("h", "", "Adresse IP ou hôte du serveur SSH")
 
 	// Parse les flags
 	flag.Parse()
