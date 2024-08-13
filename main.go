@@ -5,9 +5,10 @@ import (
 	"fmt"
 	"log"
     "strings"
-	"os"
+	// "os"
+	"flag"
 	"golang.org/x/crypto/ssh"
-	"gopkg.in/ini.v1"
+	// "gopkg.in/ini.v1"
 )
 
 
@@ -20,14 +21,33 @@ type SystemInfo struct {
 }
 
 func main() {
-	inidata, err := ini.Load("config.ini")
-	if err != nil {
-	   fmt.Printf("Fail to read file: %v", err)
-	   os.Exit(1)
-	 }
-	UserName := inidata.Section("global").Key("username").String()
-	Password := inidata.Section("global").Key("password").String()
-	Host := inidata.Section("global").Key("device").String()
+	// Fichier config.ini
+	// inidata, err := ini.Load("config.ini")
+	// if err != nil {
+	//    fmt.Printf("Fail to read file: %v", err)
+	//    os.Exit(1)
+	//  }
+	// UserName := inidata.Section("global").Key("username").String()
+	// Password := inidata.Section("global").Key("password").String()
+	// Host := inidata.Section("global").Key("device").String()
+	// ------------------------------------------------------------
+
+	// Sans fichier config.ini mais avec des flags
+	// Définir les flags pour l'entrée utilisateur via la CLI
+	user := flag.String("user", "", "Nom d'utilisateur SSH")
+	password := flag.String("password", "", "Mot de passe SSH")
+	host := flag.String("host", "", "Adresse IP ou hôte du serveur SSH")
+
+	// Parse les flags
+	flag.Parse()
+
+	// Vérifier si les flags sont fournis
+	if *user == "" || *password == "" || *host == "" {
+		log.Fatalf("Veuillez fournir les paramètres user, password et host")
+	}
+	UserName := *user
+	Password := *password
+	Host := *host
 
 
 	// Configuration SSH
