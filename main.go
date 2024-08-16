@@ -4,13 +4,15 @@ import (
 	"bytes"
 	"fmt"
 	"log"
-    "strings"
+	"strconv"
+	"strings"
+
 	// "os"
 	"flag"
+
 	"golang.org/x/crypto/ssh"
 	// "gopkg.in/ini.v1"
 )
-
 
 // SystemInfo represente les informations generales du système.
 type SystemInfo struct {
@@ -78,7 +80,7 @@ func main() {
 	session.Stdout = &stdoutBuf
 
 	// Execution des commandes pour le modele et la memoire
-	cmd := "cat /proc/cpuinfo; free"
+	cmd := "cat /proc/cpuinfo; free -g"
 	if err := session.Run(cmd); err != nil {
 		log.Fatalf("Failed to run: %s", err)
 	}
@@ -113,11 +115,19 @@ func main() {
 		case "Model":
 			systemInfo.Model = value
 		case "Mem":
-			systemInfo.Mem = strings.Split(value, " ")[0]  //Il faut prendre uniquement la premiere valeur
+			memInt, err := strconv.Atoi(strings.Split(value, " ")[0]) //Memo une string est immuable
+			if err != nil {
+				// Gestion de l'erreur si la conversion échoue
+				panic(err)
+			}
+			// Ajout de 1 à la valeur entière
+			memInt += 1
+			// Conversion de l'entier de retour en chaîne de caractères
+			systemInfo.Mem = strconv.Itoa(memInt)
 		}
 	}
 	fmt.Printf("Revision: %s\n",systemInfo.Revision)
 	fmt.Printf("Serial: %s\n",systemInfo.Serial)
 	fmt.Printf("Model: %s\n",systemInfo.Model)
-	fmt.Printf("Mem: %s\n",systemInfo.Mem)
+	fmt.Printf("Mem: %sG\n",systemInfo.Mem)
 }
